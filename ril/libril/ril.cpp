@@ -117,6 +117,8 @@ static pthread_t s_tid_dispatch;
 static pthread_t s_tid_reader;
 static int s_started = 0;
 
+static int s_cpCrashed = 0;
+
 static int s_fdDebug = -1;
 static int s_fdDebug_socket2 = -1;
 
@@ -858,6 +860,14 @@ error_exit:
     if (shouldScheduleTimeout) {
         releaseWakeLock();
     }
+}
+
+extern "C"
+int RIL_getCpCrashed()
+{
+    int result = s_cpCrashed;
+    s_cpCrashed = 0;
+    return result;
 }
 
 /** FIXME generalize this if you track UserCAllbackInfo, clear it
